@@ -75,6 +75,14 @@ void ss::Vector::operator/=(Vector v) {
 	this->y /= v.y;
 }
 
+bool ss::Vector::operator==(Vector v) {
+	return x == v.x and y == v.y;
+}
+
+bool ss::Vector::operator!=(Vector v) {
+	return x != v.x or y != v.y;
+}
+
 //Full vector operators
 ss::Vector ss::Vector::operator+(Vector v) {
 	return Vector(this->x + v.x, this->y + v.y);

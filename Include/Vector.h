@@ -22,10 +22,13 @@ namespace ss {
 		void operator -= (float x);
 		void operator *= (float x);
 		void operator /= (float x);
-		void operator += (Vector x);
-		void operator -= (Vector x);
-		void operator *= (Vector x);
-		void operator /= (Vector x);
+		void operator += (Vector v);
+		void operator -= (Vector v);
+		void operator *= (Vector v);
+		void operator /= (Vector v);
+
+		bool operator == (Vector v);
+		bool operator != (Vector v);
 
 		Vector operator = (float x);
 
