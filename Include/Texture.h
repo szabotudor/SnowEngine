@@ -18,7 +18,7 @@ namespace ss {
 	public:
 		SDL_Rect clip_rect;
 		Vector position;
-		Vector scale;
+		Vector scale = Vector(1);
 		//Creates a texture from a file
 		Texture(SDL_Window* window, const char* texture);
 		//Creates an empty texture of a certain size

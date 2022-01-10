@@ -10,6 +10,10 @@ ss::Texture::Texture(SDL_Window* window, const char* texture) {
 	pixels = (Uint32*)sfc->pixels;
 	resolution.x = sfc->clip_rect.w;
 	resolution.y = sfc->clip_rect.h;
+	clip_rect.x = 0;
+	clip_rect.y = 0;
+	clip_rect.w = 0;
+	clip_rect.h = 0;
 	SDL_FreeSurface(sfc);
 }
 
@@ -21,6 +25,10 @@ ss::Texture::Texture(SDL_Window* window, Vector size) {
 	Texture::resolution = size;
 	pixels = new Uint32[(int)size.x * (int)size.y];
 	memset(pixels, 0, sizeof(Uint32) * size.x * size.y);
+	clip_rect.x = 0;
+	clip_rect.y = 0;
+	clip_rect.w = 0;
+	clip_rect.h = 0;
 }
 
 void ss::Texture::draw() {
@@ -29,7 +37,12 @@ void ss::Texture::draw() {
 	rect.y = position.y;
 	rect.w = resolution.x * scale.x;
 	rect.h = resolution.y * scale.y;
-	SDL_RenderCopy(render, texture, &clip_rect, &rect);
+	if (clip_rect.w or clip_rect.h) {
+		SDL_RenderCopy(render, texture, &clip_rect, &rect);
+	}
+	else {
+		SDL_RenderCopy(render, texture, NULL, &rect);
+	}
 }
 
 void ss::Texture::update() {
