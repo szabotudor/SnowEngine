@@ -8,8 +8,8 @@ ss::Texture::Texture(SDL_Window* window, const char* texture) {
 	SDL_Surface* sfc = IMG_Load(texture);
 	Texture::texture = SDL_CreateTextureFromSurface(render, sfc);
 	pixels = (Uint32*)sfc->pixels;
-	size.x = sfc->clip_rect.w;
-	size.y = sfc->clip_rect.h;
+	resolution.x = sfc->clip_rect.w;
+	resolution.y = sfc->clip_rect.h;
 	SDL_FreeSurface(sfc);
 }
 
@@ -18,7 +18,7 @@ ss::Texture::Texture(SDL_Window* window, Vector size) {
 	render = SDL_GetRenderer(window);
 	format = SDL_AllocFormat(SDL_GetWindowPixelFormat(window));
 	Texture::texture = SDL_CreateTexture(render, SDL_GetWindowPixelFormat(window), SDL_TEXTUREACCESS_STATIC, (int)size.x, (int)size.y);
-	Texture::size = size;
+	Texture::resolution = size;
 	pixels = new Uint32[(int)size.x * (int)size.y];
 	memset(pixels, 0, sizeof(Uint32) * size.x * size.y);
 }
@@ -27,20 +27,20 @@ void ss::Texture::draw() {
 	SDL_Rect rect;
 	rect.x = position.x;
 	rect.y = position.y;
-	rect.w = size.x;
-	rect.h = size.y;
+	rect.w = resolution.x * scale.x;
+	rect.h = resolution.y * scale.y;
 	SDL_RenderCopy(render, texture, &clip_rect, &rect);
 }
 
 void ss::Texture::update() {
-	SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * size.x);
+	SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * resolution.x);
 }
 
 void ss::Texture::set_pixel(Vector pixel, int r, int g, int b, int a) {
-	if (pixel.x >= size.x or pixel.y >= size.y) {
+	if (pixel.x >= resolution.x or pixel.y >= resolution.y) {
 		return;
 	}
-	pixels[(int)pixel.x + (int)pixel.y * (int)size.x] = SDL_MapRGB(format, r, g, b);
+	pixels[(int)pixel.x + (int)pixel.y * (int)resolution.x] = SDL_MapRGB(format, r, g, b);
 }
 
 void ss::Texture::set_pixel(Vector pixel, SDL_Color color) {

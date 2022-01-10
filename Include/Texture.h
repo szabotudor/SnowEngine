@@ -14,10 +14,11 @@ namespace ss {
 		SDL_Texture* texture = nullptr;
 		SDL_PixelFormat* format;
 		Uint32* pixels = nullptr;
-		Vector size;
+		Vector resolution;
 	public:
 		SDL_Rect clip_rect;
 		Vector position;
+		Vector scale;
 		//Creates a texture from a file
 		Texture(SDL_Window* window, const char* texture);
 		//Creates an empty texture of a certain size
