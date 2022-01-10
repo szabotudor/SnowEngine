@@ -29,7 +29,7 @@ void ss::Texture::draw() {
 	rect.y = position.y;
 	rect.w = size.x;
 	rect.h = size.y;
-	SDL_RenderCopy(render, texture, NULL, &rect);
+	SDL_RenderCopy(render, texture, &clip_rect, &rect);
 }
 
 void ss::Texture::update() {
