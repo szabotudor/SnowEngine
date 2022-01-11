@@ -310,6 +310,8 @@
     <Library Include="SDL2\lib\x64\SDL2main.lib" />
     <Library Include="SDL2\lib\x64\SDL2test.lib" />
     <Library Include="SDL2_image\lib\x64\SDL2_image.lib" />
+    <Library Include="SDL2_image\lib\x64\SDL2_image.lib" />
+    <Library Include="SDL2_ttf\lib\x64\SDL2_ttf.lib" />
     <Library Include="SDL2_ttf\lib\x64\SDL2_ttf.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
