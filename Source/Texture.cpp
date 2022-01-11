@@ -46,3 +46,11 @@ void ss::Texture::set_pixel(Vector pixel, int r, int g, int b, int a) {
 void ss::Texture::set_pixel(Vector pixel, SDL_Color color) {
 	set_pixel(pixel, color.r, color.g, color.b, color.a);
 }
+
+SDL_Color ss::Texture::get_pixel(Vector pixel) {
+	SDL_Color color;
+	color.r = pixels[(int)pixel.x + (int)pixel.y * (int)size.x] >> 16;
+	color.g = pixels[(int)pixel.x + (int)pixel.y * (int)size.x] >> 8;
+	color.b = pixels[(int)pixel.x + (int)pixel.y * (int)size.x];
+	return color;
+}

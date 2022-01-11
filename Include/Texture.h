@@ -29,5 +29,7 @@ namespace ss {
 		void set_pixel(Vector pixel, int r, int g, int b, int a = 255);
 		//Sets the color of a certain pixel (only applies when update is called)
 		void set_pixel(Vector pixel, SDL_Color color);
+		//Gets the color of the given pixel
+		SDL_Color get_pixel(Vector pixel);
 	};
 }
