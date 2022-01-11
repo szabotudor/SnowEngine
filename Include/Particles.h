@@ -91,6 +91,7 @@ namespace ss {
 		EmissionShape emission_shape = EmissionShape::POINT;
 		double emission_radius = 1;
 		Vector position;
+		Vector draw_offset;
 
 		ParticleEmitter(SDL_Window* window, Vector position, bool sort_by_lifetie = false);
 		//Adds a specified ammount of the given particle into the next free layer

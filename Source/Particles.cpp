@@ -169,8 +169,8 @@ void ss::ParticleEmitter::draw() {
 					rect.w *= scale;
 					rect.h *= scale;
 				}
-				rect.x = p_position[j].x;
-				rect.y = p_position[j].y;
+				rect.x = p_position[j].x + draw_offset.x;
+				rect.y = p_position[j].y + draw_offset.y;
 				if (particle_layer[ly].get_colors_in_gradient() > 0) {
 					color = particle_layer[ly].get_color_at_timestamp(p_lifetime[j]);
 					SDL_SetTextureColorMod(particle_layer[ly].texture, color.r, color.g, color.b);
