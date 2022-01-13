@@ -50,10 +50,12 @@ void ss::Texture::update() {
 }
 
 void ss::Texture::set_pixel(Vector pixel, int r, int g, int b, int a) {
-	if (pixel.x >= resolution.x or pixel.y >= resolution.y) {
+	if (pixel.x >= resolution.x or pixel.y >= resolution.y or pixel.x < 0 or pixel.y < 0) {
 		return;
 	}
-	pixels[(int)pixel.x + (int)pixel.y * (int)resolution.x] = SDL_MapRGB(format, r, g, b);
+	else {
+		pixels[(int)pixel.x + (int)pixel.y * (int)resolution.x] = SDL_MapRGB(format, r, g, b);
+	}
 }
 
 void ss::Texture::set_pixel(Vector pixel, SDL_Color color) {
@@ -61,9 +63,15 @@ void ss::Texture::set_pixel(Vector pixel, SDL_Color color) {
 }
 
 SDL_Color ss::Texture::get_pixel(Vector pixel) {
-	SDL_Color color;
-	color.r = pixels[(int)pixel.x + (int)pixel.y * (int)resolution.x] >> 16;
-	color.g = pixels[(int)pixel.x + (int)pixel.y * (int)resolution.x] >> 8;
-	color.b = pixels[(int)pixel.x + (int)pixel.y * (int)resolution.x];
-	return color;
+	SDL_Color color{};
+	if (pixel.x >= resolution.x or pixel.y >= resolution.y or pixel.x < 0 or pixel.y < 0) {
+		color.r = 0;
+		color.g = 0;
+		color.b = 0;
+		return color;
+	}
+	else {
+		SDL_GetRGB(pixels[(int)pixel.x + (int)pixel.y * (int)resolution.x], format, &color.r, &color.g, &color.b);
+		return color;
+	}
 }
