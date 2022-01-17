@@ -41,10 +41,10 @@ void ss::CollisionShape::push_out(CollisionShape& cs) {
 		}
 
 		if (cs_center.y <= center.y) {
-			depth.y = cs.position.y + cs.size.x - position.y;
+			depth.y = cs.position.y + cs.size.y - position.y;
 		}
 		else {
-			depth.y = -(position.y + size.x - cs.position.y);
+			depth.y = -(position.y + size.y - cs.position.y);
 		}
 
 		if (natural(depth.x) > natural(depth.y)) {
@@ -122,6 +122,8 @@ void ss::CollisionShape::draw() {
 	rect.h = size.y;
 	SDL_SetRenderDrawColor(render, draw_color.r, draw_color.g, draw_color.b, draw_color.a);
 	SDL_RenderDrawRect(render, &rect);
+	Vector center = get_center();
+	SDL_RenderDrawPoint(render, center.x, center.y);
 	SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
 }
 
