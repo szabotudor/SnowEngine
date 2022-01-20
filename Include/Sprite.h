@@ -18,12 +18,13 @@ namespace ss {
 		SDL_Renderer* render;
 		SDL_Surface* surface;
 		SDL_Texture** textures;
-		SDL_Rect rect;
+		SDL_Rect* rects;
 	public:
 		int frame = 0;
 		SDL_RendererFlip flip = SDL_FLIP_NONE;
 		bool playing = false;
 		Vector position;
+		Sprite();
 		Sprite(SDL_Window *window, const char* texture);
 		Sprite(SDL_Window* window, int frames, const char ** textures);
 		//Loads a new set of sprites, replacing the original textures
