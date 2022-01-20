@@ -136,5 +136,5 @@ ss::Vector ss::Vector::direction_to(Vector v) {
 }
 
 double ss::Vector::distance_to(Vector v) {
-	return (v.x - Vector::x) * (v.x - Vector::x) + (v.y - Vector::y) * (v.y - Vector::y);
+	return sqrt((v.x - Vector::x) * (v.x - Vector::x) + (v.y - Vector::y) * (v.y - Vector::y));
 }
