@@ -3,37 +3,41 @@
 
 
 ss::ParticleEmitter::ParticleEmitter(SDL_Window* window, Vector position, bool sort_by_lifetie) {
+	rng.randomize();
 	ParticleEmitter::sort_by_lifetime = sort_by_lifetie;
 	ParticleEmitter::window = window;
 	render = SDL_GetRenderer(window);
 	ParticleEmitter::position = position;
 }
 
-void ss::ParticleEmitter::add_particle_layer(int ammount, SDL_Texture* texture, double lifelimit) {
+void ss::ParticleEmitter::add_particle_layer(int ammount, SDL_Texture* texture, double lifelimit, double explosiveness) {
 	resize(layer, layer + 1, particle_layer);
-	resize(ParticleEmitter::ammount, ParticleEmitter::ammount + ammount, p_lifetime);
-	resize(ParticleEmitter::ammount, ParticleEmitter::ammount + ammount, p_angle);
-	resize(ParticleEmitter::ammount, ParticleEmitter::ammount + ammount, p_angular_velocity);
-	resize(ParticleEmitter::ammount, ParticleEmitter::ammount + ammount, p_position);
-	resize(ParticleEmitter::ammount, ParticleEmitter::ammount + ammount, p_velocity);
-	resize(ParticleEmitter::ammount, ParticleEmitter::ammount + ammount, p_layer);
-	resize(ParticleEmitter::ammount, ParticleEmitter::ammount + ammount, p_drawn);
-	resize(ParticleEmitter::ammount, ParticleEmitter::ammount + ammount, p_order);
+	resize(max_ammount, max_ammount + ammount, p_lifetime);
+	resize(max_ammount, max_ammount + ammount, p_angle);
+	resize(max_ammount, max_ammount + ammount, p_angular_velocity);
+	resize(max_ammount, max_ammount + ammount, p_position);
+	resize(max_ammount, max_ammount + ammount, p_velocity);
+	resize(max_ammount, max_ammount + ammount, p_layer);
+	resize(max_ammount, max_ammount + ammount, p_drawn);
+	resize(max_ammount, max_ammount + ammount, p_order);
+	resize(max_ammount, max_ammount + ammount, p_first_reset);
 	particle_layer[layer].texture = texture;
 	particle_layer[layer].lifelimit = lifelimit;
 
 	for (int i = ParticleEmitter::ammount; i < ParticleEmitter::ammount + ammount; i++) {
-		p_lifetime[i] = -lifelimit + lifelimit / ammount * (i + 1);
+		p_lifetime[i] = -lifelimit * (1 - explosiveness) + lifelimit / ammount * (i + 1) * (1 - explosiveness);
 		p_angle[i] = 0;
 		p_angular_velocity[i] = 0;
 		p_position[i] = position;
 		p_velocity[i] = 0;
 		p_layer[i] = layer;
 		p_drawn[i] = true;
+		p_first_reset[i] = true;
 		p_order[i] = i;
 	}
 
 	ParticleEmitter::ammount += ammount;
+	max_ammount += ammount;
 	layer++;
 }
 
@@ -73,27 +77,33 @@ void ss::ParticleEmitter::update(double delta) {
 			if (p_lifetime[i] > particle_layer[ly].lifelimit - particle_layer[ly].lifetime_random) {
 				double randl = rng.randd(particle_layer[ly].lifetime_random);
 				if (p_lifetime[i] > particle_layer[ly].lifelimit - randl) {
-					p_lifetime[i] -= particle_layer[ly].lifelimit - randl;
-					switch (emission_shape) {
-					case ss::ParticleEmitter::EmissionShape::POINT:
-						p_position[i] = position;
-						break;
-					case ss::ParticleEmitter::EmissionShape::CIRCLE:
-						p_position[i] = rng.randdir() * rng.randd(emission_radius) + position;
-						break;
-					case ss::ParticleEmitter::EmissionShape::RECT:
-						break;
-					case ss::ParticleEmitter::EmissionShape::LINE:
-						break;
-					default:
-						break;
+					if (!one_time or p_first_reset[i]) {
+						p_first_reset[i] = false;
+						p_lifetime[i] -= particle_layer[ly].lifelimit - randl;
+						switch (emission_shape) {
+						case ss::ParticleEmitter::EmissionShape::POINT:
+							p_position[i] = position;
+							break;
+						case ss::ParticleEmitter::EmissionShape::CIRCLE:
+							p_position[i] = rng.randdir() * rng.randd(emission_radius) + position;
+							break;
+						case ss::ParticleEmitter::EmissionShape::RECT:
+							break;
+						case ss::ParticleEmitter::EmissionShape::LINE:
+							break;
+						default:
+							break;
+						}
+						p_velocity[i] = (particle_layer[ly].initial_direction * (1 - particle_layer[ly].initial_direction_randomness) +
+							rng.randdir() * particle_layer[ly].initial_direction_randomness).normalized() *
+							rng.randd_range(particle_layer[ly].initial_velocity_min, particle_layer[ly].initial_velocity_max) +
+							particle_layer[ly].initial_velocity;
+						p_angular_velocity[i] = rng.randd_range(particle_layer[ly].initial_angular_velocity_min, particle_layer[ly].initial_angular_velocity_max);
+						p_angle[i] = 0;
 					}
-					p_velocity[i] = (particle_layer[ly].initial_direction * (1 - particle_layer[ly].initial_direction_randomness) +
-						rng.randdir() * particle_layer[ly].initial_direction_randomness) *
-						rng.randd_range(particle_layer[ly].initial_velocity_min, particle_layer[ly].initial_velocity_max) +
-						particle_layer[ly].initial_velocity;
-					p_angular_velocity[i] = rng.randd_range(particle_layer[ly].initial_angular_velocity_min, particle_layer[ly].initial_angular_velocity_max);
-					p_angle[i] = 0;
+					else {
+						p_drawn[i] = false;
+					}
 				}
 			}
 			if (particle_layer[ly].use_gravity) {
@@ -155,7 +165,7 @@ void ss::ParticleEmitter::draw() {
 	}
 	while (i != i_end) {
 		int j = p_order[i];
-		if (p_lifetime[j] >= 0) {
+		if (p_lifetime[j] >= 0 and p_drawn[j]) {
 			if (p_position[j].distance_to(p_position[j + 1]) > 0.5) {
 				int ly = p_layer[j];
 				if (ly != prev_ly) {
@@ -203,7 +213,18 @@ ss::Vector ss::ParticleEmitter::get_particle_position(int i) {
 	if (i >= ammount) {
 		return -1;
 	}
-	return p_position[i];
+	else {
+		return p_position[i];
+	}
+}
+
+double ss::ParticleEmitter::get_particle_lifetime(int i) {
+	if (i >= ammount) {
+		return -1;
+	}
+	else {
+		return p_lifetime[i];
+	}
 }
 
 void ss::ParticleEmitter::set_particle_position(int i, Vector pos) {
@@ -211,6 +232,10 @@ void ss::ParticleEmitter::set_particle_position(int i, Vector pos) {
 		return;
 	}
 	p_position[i] = pos;
+}
+
+void ss::ParticleEmitter::set_draw_ammount(int ammount) {
+	ParticleEmitter::ammount = clamp(0, max_ammount, ammount);
 }
 
 SDL_Color ss::ParticleEmitter::ParticleType::get_color_at_timestamp(double time) {
