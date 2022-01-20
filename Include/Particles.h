@@ -19,12 +19,12 @@ namespace ss {
 			POINT
 		};
 		class ParticleType {
-			SDL_Color* gradient;
-			double* gradient_times;
+			SDL_Color* gradient = nullptr;
+			double* gradient_times = nullptr;
 			int colors = 0;
 
-			double* scale_curve;
-			double* scale_times;
+			double* scale_curve = nullptr;
+			double* scale_times = nullptr;
 			int scales = 0;
 			double max_scale;
 		public:
@@ -64,6 +64,8 @@ namespace ss {
 			double get_scale_at_timestamp(double time);
 			//Returns the number of scales in the scale curve
 			int get_scales_in_scale_curve();
+			//(do not use this, it is inteded for internal use of the particle emitter only) Frees all memory used by particle layer
+			void free();
 		};
 	private:
 		RandomNumberGenerator rng = RandomNumberGenerator(98132479);
@@ -119,5 +121,7 @@ namespace ss {
 		void set_particle_position(int i, Vector pos);
 		//Set the ammount of particles to be drawn
 		void set_draw_ammount(int ammount);
+		//Frees all memory used by the particle emitter
+		void free();
 	};
 }

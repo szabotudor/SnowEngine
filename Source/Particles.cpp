@@ -238,6 +238,22 @@ void ss::ParticleEmitter::set_draw_ammount(int ammount) {
 	ParticleEmitter::ammount = clamp(0, max_ammount, ammount);
 }
 
+void ss::ParticleEmitter::free() {
+	delete[] p_lifetime;
+	delete[] p_position;
+	delete[] p_velocity;
+	delete[] p_angle;
+	delete[] p_angular_velocity;
+	delete[] p_layer;
+	delete[] p_order;
+	delete[] p_drawn;
+	delete[] p_first_reset;
+	for (int i = 0; i < layer; i++) {
+		particle_layer[i].free();
+	}
+	delete[] particle_layer;
+}
+
 SDL_Color ss::ParticleEmitter::ParticleType::get_color_at_timestamp(double time) {
 	float r = 255, g = 255, b = 255;
 	SDL_Color color{};
@@ -309,4 +325,19 @@ double ss::ParticleEmitter::ParticleType::get_scale_at_timestamp(double time) {
 
 int ss::ParticleEmitter::ParticleType::get_scales_in_scale_curve() {
 	return scales;
+}
+
+void ss::ParticleEmitter::ParticleType::free() {
+	if (gradient != nullptr)
+		delete[] gradient;
+
+	if (gradient_times != nullptr)
+		delete[] gradient_times;
+
+	if (scale_curve != nullptr)
+		delete[] scale_curve;
+
+	if (scale_times != nullptr)
+		delete[] scale_times;
+
 }
