@@ -1,6 +1,6 @@
 #include<Texture.h>
 
-ss::Texture::Texture(SDL_Window* window, const char* texture) {
+ss::Texture::Texture(SDL_Window* window, const char* texture, SDL_BlendMode blend_mode) {
 	Texture::window = window;
 	render = SDL_GetRenderer(window);
 	format = SDL_AllocFormat(SDL_GetWindowPixelFormat(window));
@@ -15,9 +15,10 @@ ss::Texture::Texture(SDL_Window* window, const char* texture) {
 	clip_rect.w = 0;
 	clip_rect.h = 0;
 	SDL_FreeSurface(sfc);
+	SDL_SetTextureBlendMode(Texture::texture, blend_mode);
 }
 
-ss::Texture::Texture(SDL_Window* window, Vector size) {
+ss::Texture::Texture(SDL_Window* window, Vector size, SDL_BlendMode blend_mode) {
 	Texture::window = window;
 	render = SDL_GetRenderer(window);
 	format = SDL_AllocFormat(SDL_GetWindowPixelFormat(window));
@@ -29,6 +30,7 @@ ss::Texture::Texture(SDL_Window* window, Vector size) {
 	clip_rect.y = 0;
 	clip_rect.w = 0;
 	clip_rect.h = 0;
+	SDL_SetTextureBlendMode(Texture::texture, blend_mode);
 }
 
 void ss::Texture::draw() {

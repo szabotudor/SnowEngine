@@ -20,9 +20,9 @@ namespace ss {
 		Vector position;
 		Vector scale = Vector(1);
 		//Creates a texture from a file
-		Texture(SDL_Window* window, const char* texture);
+		Texture(SDL_Window* window, const char* texture, SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE);
 		//Creates an empty texture of a certain size
-		Texture(SDL_Window* window, Vector size = Vector(32));
+		Texture(SDL_Window* window, Vector size = Vector(32), SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE);
 		//Draws the texture to the window
 		void draw();
 		//Updates the texture
