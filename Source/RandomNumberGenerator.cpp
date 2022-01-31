@@ -1,4 +1,5 @@
 #include<RandomNumberGenerator.h>
+#include<Utility.h>
 
 ss::RandomNumberGenerator::RandomNumberGenerator(long long seed) {
 	RandomNumberGenerator::seed = seed;
@@ -16,7 +17,7 @@ long long ss::RandomNumberGenerator::rand() {
 		k2++;
 		init = rand();
 	}
-	return seed;
+	return natural(seed);
 }
 
 float ss::RandomNumberGenerator::randf(float k) {

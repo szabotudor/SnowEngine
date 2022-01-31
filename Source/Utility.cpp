@@ -193,3 +193,12 @@ int ss::natural(int val) {
 		return -val;
 	}
 }
+
+long long ss::natural(long long val) {
+	if (val >= 0) {
+		return val;
+	}
+	else {
+		return -val;
+	}
+}

@@ -68,7 +68,7 @@ namespace ss {
 			void free();
 		};
 	private:
-		RandomNumberGenerator rng = RandomNumberGenerator(98132479);
+		RandomNumberGenerator rng;
 		ParticleEmitter* sec_emitter;
 		bool use_sec_emitter = false;
 		SDL_Window* window;

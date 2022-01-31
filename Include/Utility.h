@@ -22,4 +22,5 @@ namespace ss {
 
 	double natural(double val);
 	int natural(int val);
+	long long natural(long long val);
 }
