@@ -1,6 +1,6 @@
 #include<Texture.h>
 
-ss::Texture::Texture(SDL_Window* window, const char* texture, SDL_BlendMode blend_mode) {
+ss::Texture::Texture(SDL_Window* window, const char* texture) {
 	Texture::window = window;
 	render = SDL_GetRenderer(window);
 	format = SDL_AllocFormat(SDL_GetWindowPixelFormat(window));
@@ -15,10 +15,9 @@ ss::Texture::Texture(SDL_Window* window, const char* texture, SDL_BlendMode blen
 	clip_rect.w = 0;
 	clip_rect.h = 0;
 	SDL_FreeSurface(sfc);
-	SDL_SetTextureBlendMode(Texture::texture, blend_mode);
 }
 
-ss::Texture::Texture(SDL_Window* window, Vector size, SDL_BlendMode blend_mode) {
+ss::Texture::Texture(SDL_Window* window, Vector size) {
 	Texture::window = window;
 	render = SDL_GetRenderer(window);
 	format = SDL_AllocFormat(SDL_GetWindowPixelFormat(window));
@@ -30,7 +29,6 @@ ss::Texture::Texture(SDL_Window* window, Vector size, SDL_BlendMode blend_mode) 
 	clip_rect.y = 0;
 	clip_rect.w = 0;
 	clip_rect.h = 0;
-	SDL_SetTextureBlendMode(Texture::texture, blend_mode);
 }
 
 void ss::Texture::draw() {
@@ -56,7 +54,7 @@ void ss::Texture::set_pixel(Vector pixel, int r, int g, int b, int a) {
 		return;
 	}
 	else {
-		pixels[(int)pixel.x + (int)pixel.y * (int)resolution.x] = SDL_MapRGBA(format, r, g, b, a);
+		pixels[(int)pixel.x + (int)pixel.y * (int)resolution.x] = SDL_MapRGB(format, r, g, b);
 	}
 }
 
@@ -70,11 +68,10 @@ SDL_Color ss::Texture::get_pixel(Vector pixel) {
 		color.r = 0;
 		color.g = 0;
 		color.b = 0;
-		color.a = 255;
 		return color;
 	}
 	else {
-		SDL_GetRGBA(pixels[(int)pixel.x + (int)pixel.y * (int)resolution.x], format, &color.r, &color.g, &color.b, &color.a);
+		SDL_GetRGB(pixels[(int)pixel.x + (int)pixel.y * (int)resolution.x], format, &color.r, &color.g, &color.b);
 		return color;
 	}
 }
