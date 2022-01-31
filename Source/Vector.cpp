@@ -128,7 +128,7 @@ void ss::Vector::normalize() {
 }
 
 float ss::Vector::lenght() {
-	return (float)sqrt((double)this->x * this->x + (double)this->y * this->y);
+	return (float)sqrt(this->x * this->x + this->y * this->y);
 }
 
 ss::Vector ss::Vector::direction_to(Vector v) {
