@@ -96,12 +96,14 @@ void ss::Button::set_window(SDL_Window* window) {
 }
 
 void ss::Button::draw() {
+	position += draw_offset;
 	if (rect.x != position.x or rect.y != position.y) {
 		rect.x = position.x;
 		rect.y = position.y;
 		border_rect.x = position.x - border;
 		border_rect.y = position.y - border;
 	}
+	position -= draw_offset;
 	switch (background_type) {
 	case ss::Button::BackgroundType::Rect:
 		SDL_SetRenderDrawColor(render, border_color.r, border_color.g, border_color.b, border_color.a);
@@ -119,8 +121,8 @@ void ss::Button::draw() {
 
 void ss::Button::update() {
 	bounding_box.position = position;
-	bounding_box.size = Vector(rect.w, rect.h);
 	SDL_RenderGetViewport(render, &viewport);
+	bounding_box.size = Vector(rect.w, rect.h);
 	hovered = is_hovered();
 	int x, y;
 	Uint32 mouse_state = SDL_GetMouseState(&x, &y);
@@ -144,12 +146,15 @@ void ss::Button::update() {
 }
 
 bool ss::Button::is_hovered() {
+	rect.x = position.x;
+	rect.y = position.y;
 	int x, y;
 	float rx, ry;
 	SDL_GetMouseState(&x, &y);
 	SDL_RenderGetScale(render, &rx, &ry);
 	x -= viewport.x * rx;
 	y -= viewport.y * ry;
+	//bounding_box.size = Vector(rect.w * rx, rect.h * ry);
 	return x > rect.x * rx and x < rect.x * rx + rect.w * rx and y > rect.y * ry and y < rect.y*ry + rect.h * ry;
 }
 
