@@ -121,6 +121,8 @@ namespace ss {
 		void set_particle_position(int i, Vector pos);
 		//Set the ammount of particles to be drawn
 		void set_draw_ammount(int ammount);
+		//Returns the ammount of particles to draw
+		int get_draw_ammount();
 		//Frees all memory used by the particle emitter
 		void free();
 	};

@@ -254,6 +254,10 @@ void ss::ParticleEmitter::free() {
 	delete[] particle_layer;
 }
 
+int ss::ParticleEmitter::get_draw_ammount() {
+	return ammount;
+}
+
 SDL_Color ss::ParticleEmitter::ParticleType::get_color_at_timestamp(double time) {
 	float r = 255, g = 255, b = 255;
 	SDL_Color color{};
