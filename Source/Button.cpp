@@ -118,6 +118,8 @@ void ss::Button::draw() {
 }
 
 void ss::Button::update() {
+	bounding_box.position = position;
+	bounding_box.size = Vector(rect.w, rect.h);
 	SDL_RenderGetViewport(render, &viewport);
 	hovered = is_hovered();
 	int x, y;
