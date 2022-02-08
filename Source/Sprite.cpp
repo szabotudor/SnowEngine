@@ -82,7 +82,6 @@ void ss::Sprite::draw(float delta) {
 				else {
 					playing = false;
 					frame = end;
-					time = 0;
 				}
 			}
 		}
