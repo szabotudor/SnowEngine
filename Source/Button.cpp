@@ -75,6 +75,7 @@ ss::Button::Button(SDL_Window* window, SDL_Color text_color, const char* text, c
 
 void ss::Button::set_text(char* text) {
 	surface = TTF_RenderText_Solid(Button::font, text, text_color);
+	SDL_DestroyTexture(texture);
 	texture = SDL_CreateTextureFromSurface(render, surface);
 	rect.w = surface->w;
 	rect.h = surface->h;
@@ -127,6 +128,7 @@ void ss::Button::update() {
 	int x, y;
 	Uint32 mouse_state = SDL_GetMouseState(&x, &y);
 
+	bool last_press = pressed;
 	switch (type) {
 	case ss::Button::Type::Press:
 		pressed = mouse_state & SDL_BUTTON_LMASK and hovered;
@@ -143,6 +145,9 @@ void ss::Button::update() {
 		}
 		break;
 	}
+
+	just_pressed = !last_press and pressed;
+	just_released = last_press and !pressed;
 }
 
 bool ss::Button::is_hovered() {
