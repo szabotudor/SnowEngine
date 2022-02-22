@@ -15,6 +15,8 @@ namespace ss {
 		SDL_Rect rect;
 		int line_num = 0;
 	public:
+		double angle = 0;
+		double scale = 1;
 		SDL_Color color;
 		Vector position;
 		Text(SDL_Window* window, const char* text, const char* font, Uint8 font_size = 18);

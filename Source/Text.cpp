@@ -124,7 +124,14 @@ void ss::Text::draw() {
 		SDL_SetTextureAlphaMod(texture, color.a);
 		prev_color_mod = color;
 	}
-	SDL_RenderCopy(renderer, texture, NULL, &rect);
+	
+	SDL_Rect temp_rect{};
+	temp_rect.w = rect.w * scale;
+	temp_rect.h = rect.h * scale;
+	temp_rect.x = rect.x - temp_rect.w / 2;
+	temp_rect.y = rect.y - temp_rect.h / 2;
+	SDL_RenderCopyEx(renderer, texture, NULL, &temp_rect, angle, NULL, SDL_FLIP_NONE);
+	//SDL_RenderCopy(renderer, texture, NULL, &rect);
 }
 
 string ss::Text::get_text() {
