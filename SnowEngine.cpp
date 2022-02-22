@@ -56,6 +56,10 @@ void ss::Snow::scale_window(int w, int h) {
 	viewport.y /= scale.y;
 	SDL_RenderSetScale(render, scale.x, scale.y);
 	SDL_RenderSetViewport(render, &viewport);
+	viewport.x = 0;
+	viewport.y = 0;
+	viewport.w /= scale.x;
+	viewport.h /= scale.y;
 	SDL_RenderSetClipRect(render, &viewport);
 	//Prepare the viewport border to be drawn (here for debugging, not used in final game)
 	/*
