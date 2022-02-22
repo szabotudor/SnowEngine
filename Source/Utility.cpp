@@ -157,12 +157,7 @@ ss::Vector ss::lerp(Vector start, Vector end, double weight) {
 }
 
 double ss::lerp(double start, double end, double weight) {
-	if (end > start) {
-		start += (end - start) * weight;
-	}
-	else {
-		start -= (end - start) * weight;
-	}
+	start += (end - start) * weight;
 	return start;
 }
 
